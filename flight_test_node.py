@@ -3,6 +3,7 @@ from nav_msgs.msg import Odometry
 from std_srvs.srv import Trigger
 from ardupilot_msgs.msg import Status
 from ardupilot_msgs.srv import ArmMotors, ModeSwitch, Takeoff
+from geometry_msgs.msg import TwistStamped
 from .flight_state import FlightState
 from .handlers import HANDLERS
 
@@ -10,7 +11,7 @@ class FlightTestNode(Node):
     GUIDED_MODE = 4
     LAND_MODE = 9
     TAKEOFF_ALTITUDE = 2.0
-    HOVER_DURATION = 30.0
+    HOVER_DURATION = 20.0
     def __init__(self):
         super().__init__("flight_test")
         self.state = FlightState.WAITING_FOR_SYSTEM
@@ -19,6 +20,12 @@ class FlightTestNode(Node):
         self.odometry = None
         self.hover_started_at = None
         self._handlers = HANDLERS
+        self.target_x = None
+        self.target_y = None
+        self.x0 = None
+        self.y0 = None
+        self.target_initialised = False
+        self.takeoff_command_sent = False
 
 
         self.status_subscription = self.create_subscription(
@@ -53,6 +60,12 @@ class FlightTestNode(Node):
         self.takeoff_client = self.create_client(
             Takeoff,
             "/ap/v1/experimental/takeoff",
+        )
+
+        self.velocity_publisher = self.create_publisher(
+            TwistStamped,
+            "/ap/v1/cmd_vel",
+            10
         )
 
         self.timer = self.create_timer(0.2, self.control_loop)

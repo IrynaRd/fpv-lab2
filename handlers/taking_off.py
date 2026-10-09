@@ -10,10 +10,25 @@ if TYPE_CHECKING:
 
 class TakingOffHandler(FlightStateHandler):
     def handle(self, node: "FlightTestNode") -> None:
-        if not node.request_in_progress:
-            self.call_takeoff(node)
+        if node.request_in_progress:
+            return
+
+        if not node.takeoff_command_sent: 
+            self.call_takeoff(node) 
+            return
+
+        if node.odometry is None:
+            return
+
+        current_altitude = node.odometry.pose.pose.position.z
+        altitude_tolerance = 0.5
+        if (node.TAKEOFF_ALTITUDE - current_altitude) <= altitude_tolerance:
+            node.get_logger().info(f"Altitude {current_altitude:.2f}m reached")
+            node.state = FlightState.FLYING_TO_TARGET
+        
 
     def call_takeoff(self, node: "FlightTestNode") -> None:
+        node.takeoff_command_sent = True
         node.request_in_progress = True
         request = Takeoff.Request()
         request.alt = float(node.TAKEOFF_ALTITUDE)
@@ -34,8 +49,8 @@ class TakingOffHandler(FlightStateHandler):
             node.fail("ArduPilot rejected the takeoff request")
             return
         node.get_logger().info("Takeoff command accepted")
-        node.get_logger().info(
-            f"Hovering for {node.HOVER_DURATION:.1f} seconds"
-        )
-        node.hover_started_at = time.monotonic()
-        node.state = FlightState.HOVERING
+        # node.get_logger().info(
+        #     f"Hovering for {node.HOVER_DURATION:.1f} seconds"
+        # )
+        # node.hover_started_at = time.monotonic()
+        # node.state = FlightState.FLYING_TO_TARGET
