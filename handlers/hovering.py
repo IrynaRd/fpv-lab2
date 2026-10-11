@@ -19,4 +19,4 @@ class HoveringHandler(FlightStateHandler):
         elapsed = time.monotonic() - node.hover_started_at
         if elapsed >= node.HOVER_DURATION:
             node.get_logger().info("Hover completed, starting landing")
-            node.state = FlightState.LANDING
+            node.state = FlightState.FLYING_TO_TARGET

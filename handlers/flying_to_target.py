@@ -47,7 +47,7 @@ class FlyingToTargetHandler(FlightStateHandler):
             node.get_logger().info(f"REACHED TARGET: x = {current_x}, target_x = {node.target_x}, y = {current_y}, target_y = {node.target_y}")
             node.get_logger().info(f"Distance = {distance}")
             node.hover_started_at = time.monotonic()
-            node.state = FlightState.HOVERING
+            node.state = FlightState.LANDING
             return
 
         vel_msg.twist.linear.x = float(self.linear_vel(dx))

@@ -24,7 +24,11 @@ class TakingOffHandler(FlightStateHandler):
         altitude_tolerance = 0.5
         if (node.TAKEOFF_ALTITUDE - current_altitude) <= altitude_tolerance:
             node.get_logger().info(f"Altitude {current_altitude:.2f}m reached")
-            node.state = FlightState.FLYING_TO_TARGET
+            node.get_logger().info(
+            f"Hovering for {node.HOVER_DURATION:.1f} seconds"
+        )
+            node.hover_started_at = time.monotonic()
+            node.state = FlightState.HOVERING
         
 
     def call_takeoff(self, node: "FlightTestNode") -> None:

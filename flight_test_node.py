@@ -11,7 +11,7 @@ class FlightTestNode(Node):
     GUIDED_MODE = 4
     LAND_MODE = 9
     TAKEOFF_ALTITUDE = 2.0
-    HOVER_DURATION = 20.0
+    HOVER_DURATION = 15.0
     def __init__(self):
         super().__init__("flight_test")
         self.state = FlightState.WAITING_FOR_SYSTEM
