@@ -10,8 +10,9 @@ from .handlers import HANDLERS
 class FlightTestNode(Node):
     GUIDED_MODE = 4
     LAND_MODE = 9
-    TAKEOFF_ALTITUDE = 2.0
+    TAKEOFF_ALTITUDE = 3.5
     HOVER_DURATION = 15.0
+    TARGET_HOVER_DURATION = 3.0
     def __init__(self):
         super().__init__("flight_test")
         self.state = FlightState.WAITING_FOR_SYSTEM
@@ -19,6 +20,7 @@ class FlightTestNode(Node):
         self.status = None
         self.odometry = None
         self.hover_started_at = None
+        self.hover_duration = self.HOVER_DURATION
         self._handlers = HANDLERS
         self.target_x = None
         self.target_y = None
