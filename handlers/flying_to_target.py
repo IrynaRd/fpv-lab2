@@ -24,7 +24,7 @@ class FlyingToTargetHandler(FlightStateHandler):
             node.x0 = current_x
             node.y0 = current_y
             
-            delta_x = 4.0
+            delta_x = 3.0
             delta_y = 1.4
             node.target_x = node.x0 - delta_x
             node.target_y = node.y0 - delta_y
