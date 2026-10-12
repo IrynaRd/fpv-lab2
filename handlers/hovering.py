@@ -17,6 +17,14 @@ class HoveringHandler(FlightStateHandler):
                 f"Gazebo altitude: {altitude:.2f} m"
             )
         elapsed = time.monotonic() - node.hover_started_at
-        if elapsed >= node.HOVER_DURATION:
-            node.get_logger().info("Hover completed, starting landing")
-            node.state = FlightState.LANDING
+        if elapsed >= node.hover_duration:
+            if node.hover_duration == node.TARGET_HOVER_DURATION:
+                node.get_logger().info(
+                    "Target hovering"
+                )
+                node.state = FlightState.LANDING
+            else:
+                node.get_logger().info(
+                    "Initial hover completed, starting flying to target"
+                )
+                node.state = FlightState.FLYING_TO_TARGET
