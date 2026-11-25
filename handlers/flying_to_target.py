@@ -54,7 +54,8 @@ class FlyingToTargetHandler(FlightStateHandler):
             node.velocity_publisher.publish(vel_msg)
             node.get_logger().info(
                 f"Position: x={current_x:.3f}, y={current_y:.3f}; "
-                f"Target: x={node.target_x:.3f}, y={node.target_y:.3f}"
+                f"Target: x={node.target_x:.3f}, y={node.target_y:.3f}; "
+                f"Distance tolerance = {distance}"
             )
             node.get_logger().info(f"Distance = {distance}")
             node.hover_started_at = time.monotonic()
